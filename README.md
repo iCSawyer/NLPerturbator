@@ -1,6 +1,6 @@
 # NLPerturbator: Studying the Robustness of Code LLMs to Natural Language Variations
 
-This is our replication package of the paper "? A Case Study on Code Generation". In this repository, we introduce the information of our tool NLPerturbator, the evaluation process, and our survey.
+This is our replication package of the paper "NLPerturbator: Studying the Robustness of Code LLMs to Natural Language Variations". In this repository, we introduce the information of our tool NLPerturbator, the evaluation process, and our survey.
 
 
 ## List of Materials:
