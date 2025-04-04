@@ -8,7 +8,7 @@ This is our replication package of the paper "NLPerturbator: Studying the Robust
 - [x] README.md
 - [x] NLPerturbator: Code of NLPerturbator
 - [x] Dataset: Manually verified datasets: HumanEval-R and MBPP-R
-- [x] bigcode-evaluation-harness: Evaluation tool including detailed generation results
+- [x] bigcode-evaluation-harness: The mirror of the evaluation tool we used
 - [x] Results_RQ3: Complete results of RQ3
 - [x] Survey: Questionnaire template and stats results
 - [x] Others: Including the literature review (list of collected papers and initial categories) and the appendix (implementation details and case studies)
@@ -57,14 +57,14 @@ We share the datasets under the directory `\Dataset`, including:
 
 * `\HumanEval-R` and `\MBPP-R`: manually verified perturbation datasets with default frequency
 
-_Note: In a few cases, there is no available element in the prompt to perform the perturbation, the perturbed prompt and original prompt are the same in such cases._
+_Note: In a few cases, there is no available element in the prompt to perform the perturbation, therefore the perturbed prompt and original prompt are the same in such cases._
 
 
 ## Evaluation Process with *bigcode-evaluation-harness*
 
 ### Models
 
-In our paper, we use [*bigcode-evaluation-harness*](https://github.com/bigcode-project/bigcode-evaluation-harness) to run the experiments of code generation. We use six code LLMs to run the experiments. Here are 🤗Hugging Face links of these models: [StarCoder](https://huggingface.co/bigcode/starcoder), [WizardCoder](https://huggingface.co/WizardLM/WizardCoder-Python-7B-V1.0), [InCoder](https://huggingface.co/facebook/incoder-6B), [CodeGeeX2](https://huggingface.co/facebook/incoder-6B), [CodeLlama](https://huggingface.co/TheBloke/CodeLlama-7B-fp16), and [CodeGen2](https://huggingface.co/Salesforce/codegen25-7b-mono). For GPT-3.5-Turbo, we invode the official API from OpenAI.
+In our paper, we use [*bigcode-evaluation-harness*](https://github.com/bigcode-project/bigcode-evaluation-harness) to run the experiments of code generation. We use seven code LLMs to run the experiments. Here are 🤗Hugging Face links of these models: [StarCoder](https://huggingface.co/bigcode/starcoder), [WizardCoder](https://huggingface.co/WizardLM/WizardCoder-Python-7B-V1.0), [InCoder](https://huggingface.co/facebook/incoder-6B), [CodeGeeX2](https://huggingface.co/facebook/incoder-6B), [CodeLlama](https://huggingface.co/TheBloke/CodeLlama-7B-fp16), and [CodeGen2](https://huggingface.co/Salesforce/codegen25-7b-mono). For GPT-3.5-Turbo, we invoke the official API from OpenAI.
 
 
 ### *bigcode-evaluation-harness*
@@ -74,6 +74,7 @@ Compared to the original version of [*bigcode-evaluation-harness*](https://githu
 1. Add additional statements that are used in the usage examples of the models (e.g., `model.config.pad_token_id = tokenizer.pad_token_id)` used in the WizardCoder repository).
 2. Replace the official(original) datasets with our perturbed datasets.
 3. Output the details of test.
+4. Add simple supports for OpenAI API.
 
 This is our example bash script, you can modify it to meet your requirements:
 

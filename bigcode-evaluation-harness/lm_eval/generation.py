@@ -47,6 +47,71 @@ def parallel_generations(task, dataset, accelerator, model, tokenizer, n_tasks, 
                     f"generations loaded, {n_tasks} selected from {len(generations)} with {len(generations[0])} candidates"
                 )
         return generations[:n_tasks]
+    
+    #####################
+    ###### OPEN AI ######
+    #####################
+    if args.api == True:
+        import asyncio
+        import os
+        from openai import AsyncOpenAI
+        from tqdm.asyncio import tqdm
+        import re
+
+        api_key = "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"
+        client = AsyncOpenAI(api_key=api_key)
+        
+        # prompts = [task.get_prompt(doc) for doc in dataset]
+        # print(task)
+        if args.tasks == "humaneval":        
+            prompts = [
+                "Please provide a self-contained Python script that solves the following problem in a markdown code block:\n" +
+                f"```\n{task.get_prompt(doc).strip()}\n```"
+                for doc in dataset
+            ]
+            stop_list = ["\n#", "\n```", "if __name__", "\nprint"]
+            # print(prompts[0])
+        elif args.tasks == "mbpp":
+            prompts = [
+                "Please provide a self-contained Python script that solves the following problem in a markdown code block:\n" +
+                f"```\n{task.get_prompt(doc).strip()}\n```"
+                for doc in dataset
+            ]
+            stop_list = ["\nassert", "\nprint", "\nif", "\n```"]
+            # print(prompts[0])
+        else:
+            assert False
+
+        
+        def extract_python_code(text: str) -> str:
+            _st = text.find("```")
+            if "_st" == -1:
+                print(text)
+                print("warning")
+            st = text.find("\n", _st)           
+            return text[st:].strip()
+            
+        
+        awaitables = [client.chat.completions.create(
+            model=args.model,
+            messages=[{"role": "user", "content": prompt}],
+            n=args.batch_size,
+            max_tokens=args.max_length_generation,
+            temperature=args.temperature,
+            top_p=args.top_p,
+            stop=stop_list
+        ) for prompt in prompts]
+        responses = asyncio.run(tqdm.gather(*awaitables))
+        
+        generations = []
+        for i, (prompt, response) in enumerate(zip(prompts, responses)):
+            # texts = [prompt + choice.text for choice in response.choices]
+            texts = [extract_python_code(choice.message.content) for choice in response.choices]
+            generations.append([task.postprocess_generation(text, i, args.api) for text in texts])
+        return generations
+    #####################
+    ###### OPEN AI ######
+    #####################
 
     set_seed(args.seed, device_specific=True)
 

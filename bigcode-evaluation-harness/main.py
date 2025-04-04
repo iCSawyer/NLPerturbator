@@ -34,12 +34,19 @@ class MultiChoice:
 
 def parse_args():
     parser = HfArgumentParser(EvalArguments)
-
+    
+    parser.add_argument(
+        "--api",
+        action="store_true",
+        help="If set true, enter a temperorary mode of API, only support one model"        
+    )
+    
     parser.add_argument(
         "--model",
         default="codeparrot/codeparrot-small",
         help="Model to evaluate, provide a repo name in Hugging Face hub or a local path",
     )
+    
     parser.add_argument(
         "--modeltype",
         default="causal",
@@ -224,6 +231,23 @@ def main():
         evaluator = Evaluator(accelerator, None, None, args)
         for task in task_names:
             results[task] = evaluator.evaluate(task)
+    elif args.api:
+        evaluator = Evaluator(accelerator, args.model, None, args)
+        for task in task_names:
+            if args.generation_only:
+                if accelerator.is_main_process:
+                    print("generation mode only")
+                generations, references = evaluator.generate_text(task)
+                if accelerator.is_main_process:
+                    with open(args.save_generations_path, "w") as fp:
+                        json.dump(generations, fp)
+                        print(f"generations were saved at {args.save_generations_path}")
+                    if args.save_references:
+                        with open(args.save_references_path, "w") as fp:
+                            json.dump(references, fp)
+                            print("references were saved")
+            else:
+                results[task] = evaluator.evaluate(task)
     else:
         # here we generate code and save it (evaluation is optional but True by default)
         dict_precisions = {
@@ -262,7 +286,10 @@ def main():
         assert not args.peft_model
         model_name = args.model.lower()
         
+        # model
         if "wizard" in model_name:
+            # TODO prompt 差异 暂时忽略 
+            # https://github.com/nlpxucan/WizardLM/blob/main/WizardCoder/src/inference_wizardcoder.py
             model = AutoModelForCausalLM.from_pretrained(
                 args.model,
                 **model_kwargs,

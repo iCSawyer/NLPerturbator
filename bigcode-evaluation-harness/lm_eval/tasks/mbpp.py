@@ -87,13 +87,16 @@ class MBPP(Task):
                 min_stop_index = stop_index
         return decoded_string[:min_stop_index]
 
-    def postprocess_generation(self, generation, idx):
+    def postprocess_generation(self, generation, idx, api=False):
         """Defines the postprocessing for a LM generation.
         :param generation: str
             code generation from LM
         :param idx: int
             index of doc in the dataset to which the generation belongs
         """
+        if api:
+            return generation
+        
         prompt = self.get_prompt(self.dataset["test"][idx])
         generation = generation[len(prompt) :]
         
