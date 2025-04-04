@@ -1,0 +1,50 @@
+# Config file for perturbations with 2x frequency
+
+seed: 42
+
+# config of perturbators
+perturbator:
+  example:
+  # Addition
+  extra_space_among_words:
+    prob: 0.3
+  extra_space_inside_words:
+    prob: 0.3
+  repeated_words:
+    prob: 0.3
+  repeated_char:
+    prob: 0.3
+  # Deletion
+  char_deletion:
+    prob: 0.1
+  preposition_deletion:
+    prob: 0.3
+  determiner_deletion:
+    prob: 0.3
+  space_deletion:
+    prob: 0.3
+  # Edition
+  keyboard_typo:
+    prob: 0.06
+  extra_capital_letter:
+    prob: 0.06
+
+  swap_adjacent_chars:
+    prob: 0.10
+  # C1: Keyboard typo + extra space outside words
+  c1:
+    keyboard_typo_prob: 0.03
+    extra_space_outside_words_prob: 0.15
+  # C2: Keyboard typo + repeated chars
+  c2:
+    keyboard_typo_prob: 0.03
+    repeated_char_prob: 0.15
+  # C3: Keyboard typo + char deletions
+  c3:
+    keyboard_typo_prob: 0.03
+    char_deletion_prob: 0.05
+
+
+dataset:
+  humaneval:
+  mbpp:

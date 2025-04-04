@@ -1,0 +1,64 @@
+# Config file for perturbations with default frequency
+
+seed: 42 # automatically added as a parameter to perturbate()
+
+# config of perturbators
+perturbator:
+  example:
+  # Addition
+  extra_space_among_words:
+    prob: 0.15
+  extra_space_inside_words:
+    prob: 0.15
+  repeated_words:
+    prob: 0.15
+  repeated_char:
+    prob: 0.15
+  # Deletion
+  char_deletion:
+    prob: 0.05
+  preposition_deletion:
+    prob: 0.15
+  determiner_deletion:
+    prob: 0.15
+  space_deletion:
+    prob: 0.15
+  # Edition
+  keyboard_typo:
+    prob: 0.03 
+  extra_capital_letter:
+    prob: 0.03
+  grammatical_person_variation:  
+    prob: 0.35
+  active_and_passive_voice_variation:  
+    prob: 0.35
+  word_class_variation:
+    prob: 0.35
+  synonym_substitution:
+    prob: 0.25
+  # Swap
+  swap_adjacent_chars:
+    prob: 0.05
+  swap_adjacent_words:
+    prob: 0.05
+  # Paraphrase
+  rephrasing_sentence:
+    times: 1
+  declarative_to_interrogative:
+  # C1: Keyboard typo + extra space outside words
+  c1:
+    keyboard_typo_prob: 0.015
+    extra_space_outside_words_prob: 0.075
+  # C2: Keyboard typo + repeated chars
+  c2:
+    keyboard_typo_prob: 0.015
+    repeated_char_prob: 0.075
+  # C3: Keyboard typo + char deletions
+  c3:
+    keyboard_typo_prob: 0.015
+    char_deletion_prob: 0.025
+
+
+dataset:
+  humaneval:
+  mbpp:
